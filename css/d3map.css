@@ -64,8 +64,8 @@ svg, canvas {
 
 #d3MapLayerBox {
     position: relative;
-    z-index: 10;
-    height: 150px;
+    z-index: 5;
+    height: 100px;
     width: 200px;
     top: 10px;
     left: 10px;
@@ -75,8 +75,10 @@ svg, canvas {
 }
 
 #d3MapLayerBox > div {
+    border-radius: 10px;
     margin: 5px;
     border: none;
+    background-color: #0f0f0f;
 }
 
 #d3MapLayerBox ul {

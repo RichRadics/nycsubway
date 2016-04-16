@@ -1,7 +1,7 @@
 library(dplyr)
 library(tidyr)
-setwd('~/datasets/subways')
-
+library(lubridate)
+setwd('~/Dropbox/Learning_DS/html/learnd3/carto/data')
 turnstile<-read.csv('turnstile_160130.txt')
 id_to_station<-read.csv('turnstile_id_to_station.csv')
 gis<-read.csv('turnstile_gis.csv')
@@ -76,6 +76,9 @@ turnstile_gathered <-gather(turnstile_spread,time_bucket, movement, 4:44)
 # Now to impute the NAs and respread then zero remaining. 
 # This is terrible for accurate data, but fine for a vis
 turnstile_gathered <- turnstile_gathered %>% mutate(movement=ifelse(is.na(movement),(lead(movement)-lag(movement))/2,movement)) 
+col_dates <- strptime(turnstile_gathered$time_bucket, "%Y-%m-%d %H:%M:%S")
+col_date_names<-unique(paste0(weekdays(as.Date(col_dates))," ",sprintf("%02d",hour(col_dates)),":00"))
 turnstile_spread <-spread(turnstile_gathered, time_bucket, movement)
 turnstile_spread[is.na(turnstile_spread)] <- 0
+colnames(turnstile_spread)[4:44]<-col_date_names
 write.csv(turnstile_spread, file='turnstile_160130_summ.csv')
