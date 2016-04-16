@@ -23,7 +23,22 @@ TBC
 
 ## Feedback
 
-This is the first release, and so no feedback yet...
+#### User 1
+Looks like the center of the map is in Manhattan, which makes most of Queens and Brooklyn outside default map view. I guess Queens is irrelevant for this viz, since AFAIK there are no metro stations there, but Brooklyn is important, there are many metro stations there.
+
+#### User 2
+A slider to change the value in date-time axis would be very helpful.
+
+#### User 3
+After reading your explanation in the post the visualization becomes more clear. A couple suggestions of things to improve upon.
+
+-Add Text animation with Monday time, Tuesday time... Sunday time, in the Top Center. It is quite hard to see and understand exactly which time and day you are looking at initial animation. It's more relevant to know the day of the week, rather than date in my opinion (excluding holidays).
+
+-Use tag:hover {cursor: pointer;} to not show the text cursor when you hover over the date select list on the left. 
+
+-Change the color of the top three selectors Terrain, Subway Stations, Subway Lines to a color that is not white. When you unselect Terrain, and the background becomes white, the other two selection text disappears into the background.
+
+Otherwise, I think this is great work, adding the legend and explanation would definitely improve the overall clarity as well.
 
 
 ## Resources
@@ -31,7 +46,7 @@ This is the first release, and so no feedback yet...
 #### Data
 
 Subway usage data: http://web.mta.info/developers/download.html
-Subway statin locations: http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
+Subway station locations: http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
 Subway routes: https://github.com/daveswartz/mapperly/blob/master/public/data/paths.json
 
 #### Libraries
