@@ -39,9 +39,13 @@ The subway route layer was simple to design, being just a set of *d3* paths load
 
 ##### Data point layer
 
-The data point layer 
+The data point layer shows the actual data for the visualisation, so needed to be clear and obvious. I chose circles to represent each station - the size was iterated to find a level where each station was clear, but at the default zoom level a few overlaps occured as possible. 
+
+The colours for positive and negative movement needed to also be clear, and red/green extremities were immediate choices. The scaling of the shading was simple in my early sketches (using Tableau), but in the end required a great deal of experimentation. As some stations had very high movement (+/- 40000) using a complete scale would have dwarfed the smaller station movements. In the end, I chose lower levels of movement to scale the full range - while this loses some detail for the viewer, it makes comparing the majority of the stations more practical.
 
 ##### Information and control layer
+
+The *d3.carto* library provided layer and nagivation controls, and I decided to add a further three control/info boxes - the day/time control, a large current day/time display, and a legend. 
 
 
 ## Feedback
