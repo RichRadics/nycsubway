@@ -132,21 +132,53 @@ function makeSomeMaps() {
         };
         return res;
       };
+
+      // Main box for current date/time
+      d3.select('#d3MapSVG')
+        .append('svg')
+        .attr('x',350)
+        .attr('y',25)
+        .attr('id','mainTimeLabel')
+        .attr('class','infoBox')
+      d3.select('#mainTimeLabel')
+        .append('rect')
+        .attr('height', 50)
+        .attr('width', 250)
+        .attr('rx','10')
+        .attr('ry','10')
+      d3.select('#mainTimeLabel')
+        .append('text')
+        .attr('id','#mainTimeLabelText')
+        .attr('class','mainTimeLabelText')
+        .attr('x', 50)
+        .attr('y', 35)
+        .attr('fill','white')
+        .text('hello this is text')
+
       // and build the time nav list
       d3.select('#d3MapSVG')
         .append('svg')
         .attr('id','timeLabelsBox')
-        .attr('class','timeLabelsBox')
-        .attr('x', 10)
-        .attr('y', 100)
+        .attr('class','infoBox')
+        .attr('x',10)
+        .attr('y',100)
+        .attr('width',150)
+        .attr('height', timeLabels.length*15+50)
         .on('click', function() {console.log('box click')})
 
       d3.select('#timeLabelsBox')
         .append('rect')
-        .attr('rx',10)
-        .attr('ry',10)
         .attr('width',150)
         .attr('height', timeLabels.length*15+50)
+        .attr('rx','10')
+        .attr('ry','10')
+      
+      d3.select('#timeLabelsBox')
+        .append('text')
+        .attr('x', 50)
+        .attr('y', 25)
+        .text('Date/time')
+        .attr('class', 'timeLabelsBoxTitle')
 
       d3.select('#timeLabelsBox')
         .append('g')
@@ -155,7 +187,6 @@ function makeSomeMaps() {
         .selectAll('g')
         .data(timeLabels)
         .enter()
-        .append('g')
         .append('text')
         .text(time_label_formatter)
         .attr('y', function(d,i) {return 50+15*i})
@@ -171,6 +202,9 @@ function makeSomeMaps() {
         d3.selectAll(".station").transition().duration(1000).attr("fill", function(d) {return colorScale(d.movement[curIndex])});
         d3.selectAll(".timeLabel")
           .attr("fill", function (d,i) {if (i==curIndex) {return "white"} else {return "grey"}});
+        var s=document.getElementById('#mainTimeLabelText');
+        s.innerHTML=timeLabels[curIndex];  
+        //d3.select('#mainTimeLabelText').text(timeLabels[curIndex]);
       };
       // the timer function - run through the array until end, firing setTimeIndex
       function nextMovement() {
@@ -185,7 +219,7 @@ function makeSomeMaps() {
       };
          // Start the initial animation timer
       setTimeIndex(timeIndex);
-      //var myTimer=d3_timer.interval(nextMovement, 1000);
+      var myTimer=d3_timer.interval(nextMovement, 1000);
       
     }; 
     
@@ -196,6 +230,7 @@ function makeSomeMaps() {
 <body onload="makeSomeMaps()">
 <h1>Visualising the New York City Subway</h1>
 <div id="map"></div>
+Words
 <footer>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
 <script src="https://d3js.org/d3-timer.v0.4.min.js"></script>

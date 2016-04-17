@@ -26,11 +26,16 @@ div.tooltip {
     z-index: 10;
 }
 
-.timeLabel {
+.infoBox {
+  border-radius: 10px;
+  fill: #0f0f0f;
   font-size: 10;
-  text-anchor: end;
   font-weight: bold;
+}
+.timeLabel {
+  text-anchor: end;
   cursor: pointer;
+  font-size: 10;
   z-index: 7; 
 }
 
@@ -38,7 +43,21 @@ div.tooltip {
   fill: white;
 }
 
+.mainTimeLabelText {
+  font-size:24;
+}
+
+#mainTimeLabel {
+  position: absolute;
+}
 #timeLabelsBox {
-  fill: #0f0f0f;
-  border-radius: 10px;
+  position: absolute;  
+}
+
+.timeLabelsBoxTitle {
+  font-size: 16;
+  fill: white;
+  text-anchor: start;
+  cursor: pointer;
+  z-index: 7;   
 }
