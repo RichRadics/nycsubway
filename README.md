@@ -20,9 +20,10 @@ Additionally, I located a geojson file containing the paths of the subway lines 
 ### Visualisation choice
 
 Displaying the data as a map was a simple choice - in order to investigate geographical relationships, its the only real choice. Exactly how to format the map, however, required more thought. I chose the *d3.carto* library to simplify the presentation, as it works with *d3*, and makes multi-layer maps easy to implement. In my case, I decided on three layers:
-  . A base tile map, sourced from the *cartodb* website. This is a tile map to allow the user to see detailed mapping of New York.
-  . A subway route layer
-  . A layer of the individual station locations.
+
+- A base tile map, sourced from the *cartodb* website. This is a tile map to allow the user to see detailed mapping of New York.
+- A subway route layer
+- A layer of the individual station locations.
 
 ### Visualisation Design
 
@@ -73,12 +74,12 @@ Otherwise, I think this is great work, adding the legend and explanation would d
 ### Post-feedback review
 
 I took on board all of the provided comments, but had to consider both time and my D3 skillset in what modifications I would make. As a result, I decided to:
-  . Change the date/time display to just day/time
-  . Add a centred 'current' day/time box
-  . Add a legend 
-  . Change the cursor behaviour for the day/time selection box
-  . Standardise the background rectangles
-  . Add some descriptive text.
+- Change the date/time display to just day/time
+- Add a centred 'current' day/time box
+- Add a legend 
+- Change the cursor behaviour for the day/time selection box
+- Standardise the background rectangles
+- Add some descriptive text.
 
 
 ## Issues
