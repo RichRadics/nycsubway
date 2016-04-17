@@ -228,9 +228,12 @@ function makeSomeMaps() {
   }
 </script>
 <body onload="makeSomeMaps()">
-<h1>Visualising the New York City Subway</h1>
+  <h1>Visualising the New York City Subway</h1>
+  <header>
+    <div class="introText">The New York subway is a busy system, and usage ebbs and flows through the stations as a week passes. This visualisation shows the movement in and out of subway stations over a period of a week. Initially, an animated run through the week will start - once that's finished you are free to explore! Click on a date/time on the left to change the displayed data, and hover over a station to see the accurate movement count. Note that for a given date/time, the movement is for the following 4 hours.</div>
+  </header>
+
 <div id="map"></div>
-Words
 <footer>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
 <script src="https://d3js.org/d3-timer.v0.4.min.js"></script>
