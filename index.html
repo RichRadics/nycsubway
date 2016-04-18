@@ -106,7 +106,7 @@ function makeSomeMaps() {
       // The fill function and the mouseover tooltip and mouseout clear
       d3.selectAll("circle.station")
         .attr("fill", function(d) {return colorScale(d.movement[1])})
-        .on("mouseover", function(d,i) {   
+        .on("mouseover", function(d,i) {  
           div.transition()    
               .duration(200)    
               .style("opacity", .9);    
