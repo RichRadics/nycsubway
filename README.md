@@ -5,7 +5,7 @@ As part of my Udacity Data Analyst Nanodegree, I performed some cleanup and anal
 
 ## Summary
 
-This visualisation shows the passenger movement through every NYC subway station over a period of a week. It shows the areas where more people travel to at different times of day - highlighting commuter and working areas - and also illustrates the difference in usage between weekdays and weekends. 
+This visualisation shows the passenger movement through every NYC subway station over a period of a week (starting 26th April 2016). It shows the areas where more people travel to at different times of day - highlighting commuter and working areas - which nicely aligns with Lower Manhattan.
 
 ## Design
 
@@ -15,14 +15,15 @@ I sourced the data for this visualisation from two sources. The New York Metropo
 
 In particular, making the data easy to handle for the animation of the visualisation was of high importance - as a result, each station consists of a single row, with a long collection of columns corresponding to each day/time observation. The javascript can then easily convert this into an array for simple display/change. The R script and mapping files are in the *data* folder.
 
-Additionally, I located a geojson file containing the paths of the subway lines - this would help a user link the stations together when exploring the data. This file required no preprocessing, and is imported as-is.
+Additionally, I located geojson files containing the outline of NYC communities, and the paths of the subway lines. I thinned the community file down to only 'Lower Manhattan', as this is our key area of interest. The subway lines would help a user link the stations together when exploring the data. The files required no additional preprocessing, and is imported as-is.
 
 ### Visualisation choice
 
-Displaying the data as a map was a simple choice - in order to investigate geographical relationships, its the only real choice. Exactly how to format the map, however, required more thought. I chose the *d3.carto* library to simplify the presentation, as it works with *d3*, and makes multi-layer maps easy to implement. In my case, I decided on three layers:
+Displaying the data as a map was a simple choice - in order to investigate geographical relationships, its the only real choice. Exactly how to format the map, however, required more thought. I chose the *d3.carto* library to simplify the presentation, as it works with *d3*, and makes multi-layer maps easy to implement. In my case, I decided on four layers:
 
 - A base tile map, sourced from the *cartodb* website. This is a tile map to allow the user to see detailed mapping of New York.
 - A subway route layer
+- A 'Lower Manhattan' layer.
 - A layer of the individual station locations.
 
 ### Visualisation Design
@@ -36,6 +37,10 @@ I chose a dark colour scheme to create good contrast with the data points, and a
 ##### Subway route layer
 
 The subway route layer was simple to design, being just a set of *d3* paths loaded from a GeoJSON file. Using a narrow stroke-width for the paths, and a unique colour would make the subway routes clear.
+
+##### Manhattan layer
+
+The Lower Manhattan layer was similar to the subway layer, a set of *d3* paths loaded from a GeoJSON file. I used a white border and a 25% opacity background to highlight this area. 
 
 ##### Data point layer
 
@@ -97,6 +102,7 @@ There is a major browser support issue, at time of writing, with only Chrome fun
 Subway usage data: http://web.mta.info/developers/download.html
 Subway station locations: http://web.mta.info/developers/data/nyct/subway/StationEntrances.csv
 Subway routes: https://github.com/daveswartz/mapperly/blob/master/public/data/paths.json
+NYC Community areas: http://data.beta.nyc/dataset/nyc-community-districts/resource/d826bbc6-a376-4642-8d8b-3a700d701557
 
 #### Libraries
 

@@ -65,7 +65,7 @@ svg, canvas {
 #d3MapLayerBox {
     position: relative;
     z-index: 5;
-    height: 100px;
+    height: 110px;
     width: 200px;
     top: 10px;
     left: 10px;
@@ -136,11 +136,6 @@ div.d3MapModalArrow {
         position: absolute;
         bottom: -20px;
         left: 33px;
-}
-
-
-#d3MapSVG {
-
 }
 
 rect.minimap-extent {

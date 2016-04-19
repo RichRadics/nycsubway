@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
     <link type="text/css" rel="stylesheet" href="css/d3map.css" />
     <link type="text/css" rel="stylesheet" href="css/subway.css" />
-    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald' 
+      rel='stylesheet' type='text/css'>
 </head>
 <script>
 function makeSomeMaps() {
@@ -26,6 +27,14 @@ function makeSomeMaps() {
 
     // add the subway line paths
     map.addCartoLayer(baseLayer);
+
+    lineLayer = d3.carto.layer.geojson();
+    lineLayer.path("data/districts_b.geojson")
+    .label("Lower Manhattan")
+    .renderMode("svg")
+    .cssClass("manhattan");
+
+    map.addCartoLayer(lineLayer);
 
     lineLayer = d3.carto.layer.geojson();
     lineLayer.path("data/subwaypaths.geojson")
@@ -53,10 +62,14 @@ function makeSomeMaps() {
         .style("opacity", 0);
 
     // my scale for the station indicators.
-    // i use a 5-part scale so that the colours max out at -2000 and 600, but still have
-    // enough range to avoid an overflow (and thus a black dot)
-    var colorScale = d3.scale.linear().domain([-100000,-2000, 0, 600,100000]).range(['red','red', 'black', 'green', 'green']);
-    var colorScaleLegend = d3.scale.linear().domain([-2000, 0, 1000]).range(['red', 'black', 'green']);
+    // i use a 5-part scale so that the colours max out at -2000 and 2000, but 
+    // still have enough range to avoid an overflow (and thus a black dot)
+    var colorScale = d3.scale.linear()
+      .domain([-100000,-2000, 0, 2000,100000])
+      .range(['red','red', 'black', 'green', 'green']);
+    var colorScaleLegend = d3.scale.linear()
+      .domain([-2000, 0, 2000])
+      .range(['red', 'black', 'green']);
      
     // add the legend for the colours
     legendBox = d3.select('#d3MapSVG')
@@ -72,18 +85,23 @@ function makeSomeMaps() {
       .attr('ry',10)
     colorlegend('#legendBox', colorScaleLegend, 'linear', 
       { 'linearBoxes': 25,
-        'title': 'Movement through station (-ve is more arriving)'});
+        'title': 'Movement through station (negative means more people arriving)'});
     
-
+    // ------------------------------------------------------------------------
     // read in the csv, and once loaded build my data-driven objects
-    d3.csv("data/turnstile_160130_summ.csv", oneday);
+    // Note this function is long, so I've marked the start/end...
+
+    d3.csv("data/turnstile_160402_summ.csv", oneday);
     function oneday(data_in) {
       // reformat the csv to move all of the timelabel data into an array
       // this makes the animation between states MUCH easier
       timeLabels=Object.keys(data_in[0]).slice(4);
       data=data_in.map(function(d){
         var arr = Object.keys(d).map(function(k) { return d[k] });
-        return {'lat': d.lat, 'long': d.long, 'name': d.STATION, movement: arr.slice(4)}});
+        return {'lat': d.lat, 
+                'long': d.long, 
+                'name': d.STATION, 
+                movement: arr.slice(4)}});
 
       // add my primary station layer
       xyLayer = d3.carto.layer.xyArray();
@@ -101,7 +119,7 @@ function makeSomeMaps() {
 
       map.addCartoLayer(xyLayer);
       
-      
+
       // set my properties for the stations. 
       // The fill function and the mouseover tooltip and mouseout clear
       d3.selectAll("circle.station")
@@ -127,58 +145,14 @@ function makeSomeMaps() {
       function time_label_formatter(x) {
         res = x;
         time = x.slice(x.length-5);
-        if (time!="00:00") {
+        if (parseInt(time.substr(0,2))>3) {
           res=time;
         };
         return res;
       };
 
-      // Main box for current date/time
-      d3.select('#d3MapSVG')
-        .append('svg')
-        .attr('x',350)
-        .attr('y',25)
-        .attr('id','mainTimeLabel')
-        .attr('class','infoBox')
-      d3.select('#mainTimeLabel')
-        .append('rect')
-        .attr('height', 50)
-        .attr('width', 250)
-        .attr('rx','10')
-        .attr('ry','10')
-      d3.select('#mainTimeLabel')
-        .append('text')
-        .attr('id','#mainTimeLabelText')
-        .attr('class','mainTimeLabelText')
-        .attr('x', 50)
-        .attr('y', 35)
-        .attr('fill','white')
-        .text('hello this is text')
-
-      // and build the time nav list
-      d3.select('#d3MapSVG')
-        .append('svg')
-        .attr('id','timeLabelsBox')
-        .attr('class','infoBox')
-        .attr('x',10)
-        .attr('y',100)
-        .attr('width',150)
-        .attr('height', timeLabels.length*15+50)
-        .on('click', function() {console.log('box click')})
-
-      d3.select('#timeLabelsBox')
-        .append('rect')
-        .attr('width',150)
-        .attr('height', timeLabels.length*15+50)
-        .attr('rx','10')
-        .attr('ry','10')
-      
-      d3.select('#timeLabelsBox')
-        .append('text')
-        .attr('x', 50)
-        .attr('y', 25)
-        .text('Date/time')
-        .attr('class', 'timeLabelsBoxTitle')
+      // Add mainly static objects - included in an external file to declutter
+      map_add_boxes(timeLabels.length);
 
       d3.select('#timeLabelsBox')
         .append('g')
@@ -199,12 +173,20 @@ function makeSomeMaps() {
       // and highlighting the correct time label 
       function setTimeIndex(curIndex) {
         timeIndex=curIndex;
-        d3.selectAll(".station").transition().duration(1000).attr("fill", function(d) {return colorScale(d.movement[curIndex])});
+        d3.selectAll(".station")
+          .transition()
+          .duration(1000)
+          .attr("fill", function(d) {
+            return colorScale(d.movement[curIndex])
+          });
         d3.selectAll(".timeLabel")
-          .attr("fill", function (d,i) {if (i==curIndex) {return "white"} else {return "grey"}});
+          .attr("fill", function (d,i) {
+            if (i==curIndex) {return "white"} else {return "grey"}
+          });
+        // the d3 method doesn't work here for some reason
+        // fall back to old school js selectors
         var s=document.getElementById('#mainTimeLabelText');
         s.innerHTML=timeLabels[curIndex];  
-        //d3.select('#mainTimeLabelText').text(timeLabels[curIndex]);
       };
       // the timer function - run through the array until end, firing setTimeIndex
       function nextMovement() {
@@ -222,24 +204,32 @@ function makeSomeMaps() {
       var myTimer=d3_timer.interval(nextMovement, 1000);
       
     }; 
+    // ------------------------------------------------------------------------
     
       
     
   }
 </script>
 <body onload="makeSomeMaps()">
-  <h1>Visualising the New York City Subway</h1>
+  <h1>Where do New Yorkers go to work?</h1>
   <header>
-    <div class="introText">The New York subway is a busy system, and usage ebbs and flows through the stations as a week passes. This visualisation shows the movement in and out of subway stations over a period of a week. Initially, an animated run through the week will start - once that's finished you are free to explore! Click on a date/time on the left to change the displayed data, and hover over a station to see the accurate movement count. Note that for a given date/time, the movement is for the following 4 hours.</div>
+    <div class="introText">New York is a busy city, and has a very busy subway system whose usage ebbs and flows through the stations as a week passes. This visualisation shows the movement in and out of subway stations over a period of a week (starting 16th April 2016). Looking at a map, you can clearly see that people commute into Lower Manhattan each weekday morning, then away again in the afternoon. Initially, an animated run through the week will start - this will show you the flow of the week - and once that's finished you are free to explore! Click on a date/time on the left to change the displayed data, and hover over a station to see the accurate movement count.</div>
   </header>
 
 <div id="map"></div>
 <footer>
+<div class="introText">
+   Notes:
+   <ul>For a given date/time, the movement is for the following 4 hours.</ul>
+   <ul>The colour scale is artificially limited to +/- 2000. This prevents the really busy stations (e.g. Wall St) from drowning out the smaller residential stations.</ul>
+</div>
+
+</footer>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
 <script src="https://d3js.org/d3-timer.v0.4.min.js"></script>
 <script src="http://bl.ocks.org/emeeks/raw/f3105fda25ff785dc5ed/tile.js" type="text/javascript"></script> 
 <script src="https://rawgit.com/emeeks/d3-carto-map/master/d3.carto.map.js" type="text/javascript"></script>
 <script src="js/colorLegend.js" type="text/javascript"></script>
-</footer>
+<script src="js/subway.js" type="text/javascript"></script>
 </body>
 </html>
